@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+button {
+    @apply hover:cursor-pointer;
+}
+
+.fondo-home {
+    background-image: linear-gradient(to right top, rgba(37, 99, 235, 1), rgba(5, 150, 105, 1));
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.caja-descripcion {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+}
+    
+.tarjeta {
+    transition: all 0.3s ease;
+    @apply hover:cursor-pointer;
+}
+
+.tarjeta:hover {
+    transform: translateY(-10px);
+}

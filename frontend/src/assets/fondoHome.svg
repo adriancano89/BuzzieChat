@@ -1,0 +1,108 @@
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Degradado de fondo -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.9"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Fondo -->
+  <rect width="100%" height="100%" fill="url(#bgGradient)"/>
+  
+  <!-- Burbujas de chat azules (izquierda) -->
+  <g opacity="0.3">
+    <!-- Burbuja 1 -->
+    <rect x="120" y="120" width="180" height="70" rx="20" ry="20" fill="#3B82F6"/>
+    <polygon points="120,140 100,160 120,180" fill="#3B82F6"/>
+    <text x="140" y="163" font-family="Arial" font-size="16" fill="white">¡Hola! ¿Cómo estás?</text>
+    
+    <!-- Burbuja 2 -->
+    <rect x="240" y="280" width="200" height="70" rx="20" ry="20" fill="#3B82F6"/>
+    <polygon points="240,300 220,320 240,340" fill="#3B82F6"/>
+    <text x="260" y="323" font-family="Arial" font-size="16" fill="white">¿Alguien de España?</text>
+    
+    <!-- Burbuja 3 -->
+    <rect x="180" y="440" width="220" height="70" rx="20" ry="20" fill="#3B82F6"/>
+    <polygon points="180,460 160,480 180,500" fill="#3B82F6"/>
+    <text x="200" y="483" font-family="Arial" font-size="16" fill="white">Buenos días a todos</text>
+    
+    <!-- Burbuja 4 -->
+    <rect x="300" y="600" width="240" height="70" rx="20" ry="20" fill="#3B82F6"/>
+    <polygon points="300,620 280,640 300,660" fill="#3B82F6"/>
+    <text x="320" y="643" font-family="Arial" font-size="16" fill="white">BuzzieChat es increíble</text>
+    
+    <!-- Burbuja 5 -->
+    <rect x="720" y="80" width="260" height="70" rx="20" ry="20" fill="#3B82F6"/>
+    <polygon points="720,100 700,120 720,140" fill="#3B82F6"/>
+    <text x="740" y="123" font-family="Arial" font-size="16" fill="white">¿Qué recomiendas para visitar?</text>
+    
+    <!-- Burbuja 6 -->
+    <rect x="540" y="400" width="160" height="70" rx="20" ry="20" fill="#3B82F6"/>
+    <polygon points="540,420 520,440 540,460" fill="#3B82F6"/>
+    <text x="560" y="443" font-family="Arial" font-size="16" fill="white">¡Esto es genial!</text>
+    
+    <!-- Burbuja 7 -->
+    <rect x="660" y="720" width="180" height="70" rx="20" ry="20" fill="#3B82F6"/>
+    <polygon points="660,740 640,760 660,780" fill="#3B82F6"/>
+    <text x="680" y="763" font-family="Arial" font-size="16" fill="white">¡Qué buena idea!</text>
+    
+    <!-- Burbuja 8 -->
+    <rect x="1080" y="320" width="260" height="70" rx="20" ry="20" fill="#3B82F6"/>
+    <polygon points="1080,340 1060,360 1080,380" fill="#3B82F6"/>
+    <text x="1100" y="363" font-family="Arial" font-size="16" fill="white">¿Qué opinas del nuevo diseño?</text>
+    
+    <!-- Burbuja 9 -->
+    <rect x="1020" y="640" width="160" height="70" rx="20" ry="20" fill="#3B82F6"/>
+    <polygon points="1020,660 1000,680 1020,700" fill="#3B82F6"/>
+    <text x="1040" y="683" font-family="Arial" font-size="16" fill="white">Hablemos pronto</text>
+  </g>
+  
+  <!-- Burbujas de chat verdes (derecha) -->
+  <g opacity="0.3">
+    <!-- Burbuja 1 -->
+    <rect x="800" y="200" width="200" height="70" rx="20" ry="20" fill="#10B981"/>
+    <polygon points="1000,220 1020,240 1000,260" fill="#10B981"/>
+    <text x="820" y="243" font-family="Arial" font-size="16" fill="white">¡Me encanta este chat!</text>
+    
+    <!-- Burbuja 2 -->
+    <rect x="900" y="360" width="200" height="70" rx="20" ry="20" fill="#10B981"/>
+    <polygon points="1100,380 1120,400 1100,420" fill="#10B981"/>
+    <text x="920" y="403" font-family="Arial" font-size="16" fill="white">¿Viste el partido ayer?</text>
+    
+    <!-- Burbuja 3 -->
+    <rect x="840" y="520" width="100" height="70" rx="20" ry="20" fill="#10B981"/>
+    <polygon points="940,540 960,560 940,580" fill="#10B981"/>
+    <text x="860" y="563" font-family="Arial" font-size="16" fill="white">LOL 😂</text>
+    
+    <!-- Burbuja 4 -->
+    <rect x="840" y="680" width="180" height="70" rx="20" ry="20" fill="#10B981"/>
+    <polygon points="1020,700 1040,720 1020,740" fill="#10B981"/>
+    <text x="860" y="723" font-family="Arial" font-size="16" fill="white">¿Qué tal tu día?</text>
+    
+    <!-- Burbuja 5 -->
+    <rect x="360" y="240" width="200" height="70" rx="20" ry="20" fill="#10B981"/>
+    <polygon points="560,260 580,280 560,300" fill="#10B981"/>
+    <text x="380" y="283" font-family="Arial" font-size="16" fill="white">Gracias por la ayuda</text>
+    
+    <!-- Burbuja 6 -->
+    <rect x="480" y="560" width="240" height="70" rx="20" ry="20" fill="#10B981"/>
+    <polygon points="720,580 740,600 720,620" fill="#10B981"/>
+    <text x="500" y="603" font-family="Arial" font-size="16" fill="white">¿Alguien sabe programar?</text>
+    
+    <!-- Burbuja 7 -->
+    <rect x="60" y="200" width="240" height="70" rx="20" ry="20" fill="#10B981"/>
+    <polygon points="300,220 320,240 300,260" fill="#10B981"/>
+    <text x="80" y="243" font-family="Arial" font-size="16" fill="white">Me encantaría conocer más</text>
+    
+    <!-- Burbuja 8 -->
+    <rect x="60" y="480" width="200" height="70" rx="20" ry="20" fill="#10B981"/>
+    <polygon points="260,500 280,520 260,540" fill="#10B981"/>
+    <text x="80" y="523" font-family="Arial" font-size="16" fill="white">¡Vamos por un café!</text>
+    
+    <!-- Burbuja 9 -->
+    <rect x="240" y="760" width="160" height="70" rx="20" ry="20" fill="#10B981"/>
+    <polygon points="400,780 420,800 400,820" fill="#10B981"/>
+    <text x="260" y="803" font-family="Arial" font-size="16" fill="white">¡Hasta mañana!</text>
+  </g>
+</svg>
