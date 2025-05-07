@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Home() {
     return (
-        <main className="w-full h-screen flex flex-col justify-start items-center px-6 py-16">
+        <main className="fondo-home w-full h-screen flex flex-col justify-start items-center px-6 py-16">
             <div className="text-center max-w-4xl mx-auto">
                 <div>
                     <h2 className="text-6xl md:text-8xl font-bold mb-6 text-white drop-shadow-lg">
@@ -20,7 +20,7 @@ export default function Home() {
             <div className="flex flex-wrap justify-center gap-6 md:gap-8 px-4 py-12">
                 <div className="tarjeta caja-descripcion p-5 flex flex-col items-center">
                     <div className="bg-green-500 rounded-full p-3 mb-3">
-                        <img src="/public/icons/mensaje.svg" class="h-8 w-8" alt="Chat instantáneo" />
+                        <img src="/public/icons/mensaje.svg" className="h-8 w-8" alt="Chat instantáneo" />
                     </div>
                     <p className="text-white text-lg font-medium">Chat instantáneo</p>
                     <p className="text-gray-200 text-sm mt-1">Sin retrasos ni esperas</p>

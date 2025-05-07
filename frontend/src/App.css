@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-button {
+button, input[type="submit"] {
     @apply hover:cursor-pointer;
 }
 
