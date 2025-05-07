@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
@@ -7,7 +7,11 @@ export default function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState({});
-    const { register, error } = useAuth();
+    const { register, error, clearError } = useAuth();
+
+    useEffect(() => {
+        clearError();
+    }, []);
 
     const handleUserNameChange = (event) => {
         const userNameActual = event.target.value;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
 
@@ -6,7 +6,11 @@ export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState({});
-    const { login, error } = useAuth();
+    const { login, error, clearError } = useAuth();
+
+    useEffect(() => {
+        clearError();
+    }, []);
 
     const handleEmailChange = (event) => {
         const emailActual = event.target.value;

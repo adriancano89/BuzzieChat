@@ -51,6 +51,10 @@ export const AuthProvider = ({children}) => {
         }
     };
 
+    const clearError = () => {
+        setError("");
+    };
+
     useEffect(() => {
         const validarToken = async () => {
             try {
@@ -72,7 +76,7 @@ export const AuthProvider = ({children}) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ login, register, logout, isAuthenticated, user, loading, error }}>
+        <AuthContext.Provider value={{ login, register, logout, isAuthenticated, user, loading, error, clearError }}>
             {children}
         </AuthContext.Provider>
     )
