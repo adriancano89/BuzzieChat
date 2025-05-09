@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import Perfil from './pages/Perfil';
+import Chat from './pages/Chat';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path='/register' element={<Register/>}></Route>
           <Route element={<ProtectedRoute/>}>
             <Route path='/perfil' element={<Perfil/>}></Route>
+            <Route path='/chat' element={<Chat/>}></Route>
           </Route>
         </Routes>
       </AuthProvider>
