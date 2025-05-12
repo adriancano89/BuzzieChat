@@ -1,3 +1,4 @@
+import mongoose, {Types} from "mongoose";
 import Chat from "../models/Chat.model.js";
 import Message from "../models/Message.model.js";
 
@@ -47,8 +48,19 @@ export const deleteChat = async (req, res) => {
 
 export const getChats = async (req, res) => {
     try {
-        const chats = await Chat.find({ users : req.user.id }).populate("users");
-        res.status(200).json(chats);
+        const userId = new Types.ObjectId(req.user.id);
+        const chats = await Chat.find({ "users.user" : userId }).populate("users.user");
+        
+        const chatsWithLastMessage = await Promise.all(
+            chats.map(async (chat) => {
+                const chatObject = chat.toObject();
+                const lastMessage = await Message.findOne({ chat: chat._id }).sort({ createdAt: -1 }).populate("sender");
+                chatObject.lastMessage = lastMessage;
+                return chatObject;
+            })
+        );
+
+        res.status(200).json(chatsWithLastMessage);
     }
     catch (error) {
         res.status(500).json({ message: "Error al obtener los chats. Error: " + error.message });
@@ -58,7 +70,7 @@ export const getChats = async (req, res) => {
 export const getChatWithMessages = async (req, res) => {
     try {
         const idChat = req.params.id;
-        const chat = await Chat.findById(idChat).populate("users");
+        const chat = await Chat.findById(idChat).populate("users.user");
         if (chat) {
             const messages = await Message.find({ chat: idChat }).populate("sender");
             const chatData = chat.toObject();

@@ -1,8 +1,19 @@
+import mongoose, {Types} from "mongoose";
 import Message from "../models/Message.model.js";
 
 export const createMessage = async (req, res) => {
     try {
-        const message = await Message.create(req.body);
+        const { chat, sender, type, content } = req.body;
+        const chatId = new Types.ObjectId(chat);
+        const senderId = new Types.ObjectId(sender);
+        const newMessage = {
+            chat: chatId,
+            sender: senderId,
+            type: type,
+            content: content
+        };
+        const messageInserted = await Message.create(newMessage);
+        const message = await messageInserted.populate("sender");
         res.status(201).json(message);
     }
     catch (error) {

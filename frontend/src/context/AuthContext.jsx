@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { requestLogin, requestRegistro, requestLogout, requestVerificarToken } from '../api/requests';
+import { requestLogin, requestRegistro, requestLogout, requestVerificarToken } from '../api/UserRequests';
 import { useNavigate } from 'react-router-dom';
 const AuthContext = createContext();
 
@@ -21,7 +21,7 @@ export const AuthProvider = ({children}) => {
             console.log(response);
             setIsAuthenticated(true);
             setUser(response.data);
-            navigate('/perfil');
+            navigate('/chats');
         } catch (error) {
             setError(error.response.data.message);
         }
@@ -58,6 +58,7 @@ export const AuthProvider = ({children}) => {
     useEffect(() => {
         const validarToken = async () => {
             try {
+                setLoading(true);
                 const response = await requestVerificarToken();
                 console.log(response);
                 setIsAuthenticated(true);

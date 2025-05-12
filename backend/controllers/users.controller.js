@@ -53,11 +53,7 @@ export const login = async (req, res) => {
                     httpOnly: true,
                     secure : false,
                 });
-                res.json({
-                    id : usuarioEncontrado._id,
-                    username : usuarioEncontrado.username,
-                    email : usuarioEncontrado.email
-                });
+                res.json(usuarioEncontrado);
             }
             else {
                 res.status(400).json({message : "Email o contraseña incorrecto"});
