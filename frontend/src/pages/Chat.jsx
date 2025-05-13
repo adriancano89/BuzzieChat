@@ -2,9 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import Mensaje from '../components/Mensaje';
 import Sidebar from '../components/Sidebar';
+import PopupConfirmar from '../components/popups/PopupConfirmar';
+import PopupExitoso from '../components/popups/PopupExitoso';
+import PopupError from '../components/popups/PopupError';
 import { useAuth } from '../context/AuthContext';
 import { useChats } from '../context/ChatContext';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { User, Users, Trash2 } from 'lucide-react';
 
 const socket = io("http://localhost:3000");
@@ -14,10 +17,13 @@ export default function Chat() {
     const [mensaje, setMensaje] = useState("");
     const [mensajes, setMensajes] = useState([]);
     const {user} = useAuth();
-    const { getChat, insertMessage } = useChats();
+    const { getChat, insertMessage, deleteChat, error, clearError } = useChats();
     const refFinalMensajes = useRef(null);
-
+    const navigate = useNavigate();
     const params = useParams();
+    const [popupEliminar, setPopupEliminar] = useState(false);
+    const [popupExitoso, setPopupExitoso] = useState(false);
+    const [popupError, setPopupError] = useState(false);
 
     const anadirMensaje = (mensaje) => {
         setMensajes(prevMensajes => [...prevMensajes, mensaje]);
@@ -35,6 +41,18 @@ export default function Chat() {
         socket.emit('message', insertedMessage);
         anadirMensaje(insertedMessage);
         setMensaje("");
+    };
+
+    const eliminarChat = async () => {
+        clearError();
+        let exitoso = await deleteChat(params.id);
+        setPopupEliminar(false);
+        if (!exitoso) {
+            setPopupError(true);
+        }
+        else {
+            setPopupExitoso(true);
+        }
     };
 
     useEffect(() => {
@@ -96,7 +114,17 @@ export default function Chat() {
                                 }
                             </h1>
                         </div>
-                        <Trash2 size={24} className="text-red-500"/>
+                        {
+                            chat && chat.users ? (
+                                chat.users.find(userInChat => userInChat.user._id === user._id).admin ? (
+                                    <Trash2 size={24} className="text-red-500 cursor-pointer" onClick={() => setPopupEliminar(true)}/>
+                                ) : (
+                                    ""
+                                )
+                            ) : (
+                                ""
+                            )
+                        }
                     </div>
 
                     <div className="mb-4">
@@ -163,6 +191,9 @@ export default function Chat() {
                     />
                 </form>
             </div>
+            {popupEliminar && <PopupConfirmar mensaje={"¿Deseas eliminar este chat?"} confirmar={eliminarChat} cancelar={() => setPopupEliminar(false)}/>}
+            {popupExitoso && <PopupExitoso mensaje={"Chat eliminado con éxito."} confirmar={() => {setPopupExitoso(false); navigate('/chats'); }}/>}
+            {popupError && <PopupError mensaje={error} confirmar={() => setPopupError(false)}/>}
         </main>
     )
 };

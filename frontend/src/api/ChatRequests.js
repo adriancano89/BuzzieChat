@@ -11,3 +11,8 @@ export const requestGetChat = async (id) => {
     const response = await axios.put(URL + '/getChatWithMessages/' + id, {withCredentials : true});
     return response;
 }
+
+export const requestDeleteChat = async (id) => {
+    const response = await axios.delete(URL + '/delete/' + id, {withCredentials : true});
+    return response;
+}

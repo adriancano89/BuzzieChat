@@ -1,11 +1,12 @@
 import express from 'express';
 import { createChat, updateChat, deleteChat, getChats, getChatWithMessages, addUserToChat, removeUserFromChat, makeUserAdmin, removeUserAdmin } from '../controllers/chats.controller.js';
 import { validacion } from '../middlewares/validarToken.js';
+import { validarAdminChat } from '../middlewares/validarAdminChat.js';
 const router = express.Router();
 
 router.post('/create', createChat);
 router.put('/update/:id', updateChat);
-router.put('/delete/:id', deleteChat);
+router.delete('/delete/:id', validacion, validarAdminChat, deleteChat);
 router.get('/getChats', validacion, getChats);
 router.put('/getChatWithMessages/:id', getChatWithMessages);
 router.put('/addUserToChat/:idChat/user/:idUser', addUserToChat);
