@@ -102,3 +102,14 @@ export const perfil = async (req, res) => {
     const usuario = await Usuario.findById(req.user.id);
     res.json(usuario);
 };
+
+export const getUsers = async (req, res) => {
+    try {
+        const { busqueda } = req.body;
+        const { id } = req.user;
+        const usuarios = await Usuario.find({username : {$regex : busqueda, $options : 'i'}, _id : { $ne: id }}); // La opcion 'i' indica que ignore las mayusculas y minusculas
+        res.json(usuarios);
+    } catch (error) {
+        res.status(500).json({message : "Error al obtener los usuarios. Error: " + error.message });
+    }
+};

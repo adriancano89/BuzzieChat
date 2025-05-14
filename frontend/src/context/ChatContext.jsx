@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import { requestGetChats, requestGetChat, requestDeleteChat } from "../api/ChatRequests";
+import { requestGetChats, requestGetChat, requestCreateChat, requestDeleteChat } from "../api/ChatRequests";
 import { requestCreateMessage } from "../api/MessageRequests";
 const ChatContext = createContext();
 
@@ -47,6 +47,18 @@ export const ChatProvider = ({children}) => {
         return response.data;
     }
 
+    const createChat = async (newChat) => {
+        let exitoso = false;
+        try {
+            const response = await requestCreateChat(newChat);
+            console.log(response);
+            exitoso = true;
+        } catch (error) {
+            setError(error.response.data.message);
+        }
+        return exitoso;
+    }
+
     const deleteChat = async (chatId) => {
         let exitoso = false;
         try {
@@ -65,7 +77,7 @@ export const ChatProvider = ({children}) => {
     };
 
     return (
-        <ChatContext.Provider value={{ chats, getChats, getChat, insertMessage, deleteChat, error, clearError }}>
+        <ChatContext.Provider value={{ chats, getChats, getChat, insertMessage, createChat, deleteChat, error, setError, clearError }}>
             {children}
         </ChatContext.Provider>
     )

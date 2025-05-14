@@ -21,3 +21,8 @@ export const requestLogout = async () => {
     const response = await axios.post(URL + '/logout', {}, {withCredentials : true});
     return response;
 }
+
+export const requestGetUsers = async (busqueda) => {
+    const response = await axios.post(URL + '/getUsers', busqueda, {withCredentials : true});
+    return response;
+}

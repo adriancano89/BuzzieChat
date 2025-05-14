@@ -10,7 +10,7 @@ export default function Sidebar() {
                 <MessageSquare size={20} className="text-indigo-800 cursor-pointer" onClick={() => navigate('/chats')}/>
             </div>
             <div className="flex flex-col items-center space-y-8">
-                <MessageSquare size={24} className="text-white opacity-70 cursor-pointer" />
+                <MessageSquare size={24} className="text-white opacity-70 cursor-pointer" onClick={() => navigate('/chat/create')}/>
                 <User size={24} className="text-white opacity-70 cursor-pointer" onClick={() => navigate('/perfil')}/>
             </div>
         </div>

@@ -12,6 +12,11 @@ export const requestGetChat = async (id) => {
     return response;
 }
 
+export const requestCreateChat = async (chat) => {
+    const response = await axios.post(URL + '/create', chat, {withCredentials : true });
+    return response;
+};
+
 export const requestDeleteChat = async (id) => {
     const response = await axios.delete(URL + '/delete/' + id, {withCredentials : true});
     return response;

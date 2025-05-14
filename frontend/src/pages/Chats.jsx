@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Search, MessageSquare } from 'lucide-react';
+import { Search, MessageSquare, Users } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
 import ChatCard from '../components/ChatCard';
 import { useChats } from '../context/ChatContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function Chats() {
     const [usuario, setUsuario] = useState("");
     const {chats, getChats} = useChats();
-
+    const navigate = useNavigate();
     useEffect(() => {
         getChats();
     }, []);
@@ -45,10 +46,17 @@ export default function Chats() {
                     </div>
                 </section>
 
-                <div className="bg-white border-t p-4">
-                    <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
-                        <MessageSquare size={18} className="mr-2" /> Nuevo Chat
-                    </button>
+                <div className="shadow-[0_-8px_20px_rgba(0,0,0,0.25)]">
+                    <div className="px-4 py-2">
+                        <button onClick={() => navigate('/chat/create')} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
+                            <MessageSquare size={18} className="mr-2"/> Nuevo Chat
+                        </button>
+                    </div>
+                    <div className="px-4 py-1">
+                        <button onClick={() => navigate('/chat/group/create')} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
+                            <Users size={18} className="mr-2"/> Nuevo Grupo
+                        </button>
+                    </div>
                 </div>
             </div>
         </main>
