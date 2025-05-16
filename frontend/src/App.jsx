@@ -11,6 +11,7 @@ import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import Perfil from './pages/Perfil';
 import Chat from './pages/Chat';
+import ChatInfo from './pages/ChatInfo';
 import Chats from './pages/Chats';
 import CrearChat from './pages/CrearChat';
 import CrearGrupo from './pages/CrearGrupo';
@@ -27,8 +28,9 @@ function App() {
             <Route path='/register' element={<Register/>}></Route>
             <Route element={<ProtectedRoute/>}>
               <Route path='/perfil' element={<Perfil/>}></Route>
-              <Route path='/chat/:id' element={<Chat/>}></Route>
               <Route path='/chats' element={<Chats/>}></Route>
+              <Route path='/chat/:id' element={<Chat/>}></Route>
+              <Route path='/chat/info/:id' element={<ChatInfo/>}></Route>
               <Route path='/chat/create' element={<CrearChat/>}></Route>
               <Route path='/chat/group/create' element={<CrearGrupo/>}></Route>
             </Route>

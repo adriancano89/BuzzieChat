@@ -86,6 +86,20 @@ export const getChatWithMessages = async (req, res) => {
     }
 };
 
+export const getChat = async (req, res) => {
+    try {
+        const idChat = req.params.id;
+        const chat = await Chat.findById(idChat).populate("users.user");
+        if (chat) {
+            res.status(200).json(chat);
+        }
+        else {
+            res.status(404).json({ message: "Chat no encontrado" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: "Error al obtener el chat. Error: " + error.message });
+    }
+};
 
 export const addUserToChat = async (req, res) => {
     try {

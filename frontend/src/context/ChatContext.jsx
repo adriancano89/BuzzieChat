@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import { requestGetChats, requestGetChat, requestCreateChat, requestDeleteChat } from "../api/ChatRequests";
+import { requestGetChats, requestGetChat, requestCreateChat, requestDeleteChat, requestGetChatInfo, requestUpdateChat } from "../api/ChatRequests";
 import { requestCreateMessage } from "../api/MessageRequests";
 const ChatContext = createContext();
 
@@ -36,6 +36,18 @@ export const ChatProvider = ({children}) => {
         return response.data;
     }
 
+    const getChatInfo = async (chatId) => {
+        let response;
+        try {
+            response = await requestGetChatInfo(chatId);
+            console.log(response);
+        } catch (error) {
+            console.log(error.response.data.message);
+        }
+
+        return response.data;
+    }
+
     const insertMessage = async (message) => {
         let response;
         try {
@@ -51,6 +63,18 @@ export const ChatProvider = ({children}) => {
         let exitoso = false;
         try {
             const response = await requestCreateChat(newChat);
+            console.log(response);
+            exitoso = true;
+        } catch (error) {
+            setError(error.response.data.message);
+        }
+        return exitoso;
+    }
+
+    const updateChat = async (chatId, data) => {
+        let exitoso = false;
+        try {
+            const response = await requestUpdateChat(chatId, data);
             console.log(response);
             exitoso = true;
         } catch (error) {
@@ -77,7 +101,7 @@ export const ChatProvider = ({children}) => {
     };
 
     return (
-        <ChatContext.Provider value={{ chats, getChats, getChat, insertMessage, createChat, deleteChat, error, setError, clearError }}>
+        <ChatContext.Provider value={{ chats, getChats, getChat, getChatInfo, insertMessage, createChat, updateChat, deleteChat, error, setError, clearError }}>
             {children}
         </ChatContext.Provider>
     )

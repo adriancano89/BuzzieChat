@@ -12,10 +12,20 @@ export const requestGetChat = async (id) => {
     return response;
 }
 
+export const requestGetChatInfo = async (id) => {
+    const response = await axios.put(URL + '/getChat/' + id, {withCredentials : true});
+    return response;
+}
+
 export const requestCreateChat = async (chat) => {
     const response = await axios.post(URL + '/create', chat, {withCredentials : true });
     return response;
 };
+
+export const requestUpdateChat = async (id, data) => {
+    const response = await axios.put(URL + '/update/' + id, data, {withCredentials : true });
+    return response;
+}
 
 export const requestDeleteChat = async (id) => {
     const response = await axios.delete(URL + '/delete/' + id, {withCredentials : true});

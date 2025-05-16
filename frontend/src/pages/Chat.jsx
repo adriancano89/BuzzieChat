@@ -7,7 +7,7 @@ import PopupExitoso from '../components/popups/PopupExitoso';
 import PopupError from '../components/popups/PopupError';
 import { useAuth } from '../context/AuthContext';
 import { useChats } from '../context/ChatContext';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { User, Users, Trash2 } from 'lucide-react';
 
 const socket = io("http://localhost:3000");
@@ -17,13 +17,10 @@ export default function Chat() {
     const [mensaje, setMensaje] = useState("");
     const [mensajes, setMensajes] = useState([]);
     const {user} = useAuth();
-    const { getChat, insertMessage, deleteChat, error, clearError } = useChats();
+    const { getChat, insertMessage, error } = useChats();
     const refFinalMensajes = useRef(null);
     const navigate = useNavigate();
     const params = useParams();
-    const [popupEliminar, setPopupEliminar] = useState(false);
-    const [popupExitoso, setPopupExitoso] = useState(false);
-    const [popupError, setPopupError] = useState(false);
 
     const anadirMensaje = (mensaje) => {
         setMensajes(prevMensajes => [...prevMensajes, mensaje]);
@@ -41,18 +38,6 @@ export default function Chat() {
         socket.emit('message', insertedMessage);
         anadirMensaje(insertedMessage);
         setMensaje("");
-    };
-
-    const eliminarChat = async () => {
-        clearError();
-        let exitoso = await deleteChat(params.id);
-        setPopupEliminar(false);
-        if (!exitoso) {
-            setPopupError(true);
-        }
-        else {
-            setPopupExitoso(true);
-        }
     };
 
     useEffect(() => {
@@ -87,7 +72,7 @@ export default function Chat() {
             <Sidebar />
             <div className="flex flex-col flex-1 justify-between h-screen overflow-hidden bg-gray-100 p-6">
                 <section className="flex flex-col bg-white rounded-lg shadow-md p-6 mb-4 overflow-hidden">
-                    <div className="flex flex-row justify-between mb-2">
+                    <Link to={`/chat/info/` + params.id}>
                         <div className="flex flex-row gap-2">
                             {
                                 chat && chat.users ? (
@@ -114,41 +99,30 @@ export default function Chat() {
                                 }
                             </h1>
                         </div>
-                        {
-                            chat && chat.users ? (
-                                chat.users.find(userInChat => userInChat.user._id === user._id).admin ? (
-                                    <Trash2 size={24} className="text-red-500 cursor-pointer" onClick={() => setPopupEliminar(true)}/>
-                                ) : (
-                                    ""
-                                )
-                            ) : (
-                                ""
-                            )
-                        }
-                    </div>
 
-                    <div className="mb-4">
-                        <div className="flex flex-wrap gap-2">
-                            {
-                                chat && chat.users ? (
-                                    chat.users.length > 2 ? (
-                                        chat.users.map((userInChat, index) => (
-                                            <span 
-                                                key={index} 
-                                                className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
-                                            >
-                                                {userInChat.user.username}
-                                            </span>
-                                        ))
+                        <div className="mb-4">
+                            <div className="flex flex-wrap gap-2">
+                                {
+                                    chat && chat.users ? (
+                                        chat.users.length > 2 ? (
+                                            chat.users.map((userInChat, index) => (
+                                                <span 
+                                                    key={index} 
+                                                    className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
+                                                >
+                                                    {userInChat.user.username}
+                                                </span>
+                                            ))
+                                        ) : (
+                                            ""
+                                        )
                                     ) : (
-                                        ""
+                                        <p className="text-gray-500">Cargando usuarios...</p>
                                     )
-                                ) : (
-                                    <p className="text-gray-500">Cargando usuarios...</p>
-                                )
-                            }
+                                }
+                            </div>
                         </div>
-                    </div>
+                    </Link>
 
                     <div className="space-y-4 flex-1 overflow-y-auto pr-2">
                         {
@@ -191,9 +165,6 @@ export default function Chat() {
                     />
                 </form>
             </div>
-            {popupEliminar && <PopupConfirmar mensaje={"¿Deseas eliminar este chat?"} confirmar={eliminarChat} cancelar={() => setPopupEliminar(false)}/>}
-            {popupExitoso && <PopupExitoso mensaje={"Chat eliminado con éxito."} confirmar={() => {setPopupExitoso(false); navigate('/chats'); }}/>}
-            {popupError && <PopupError mensaje={error} confirmar={() => setPopupError(false)}/>}
         </main>
     )
 };
