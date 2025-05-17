@@ -31,3 +31,13 @@ export const requestDeleteChat = async (id) => {
     const response = await axios.delete(URL + '/delete/' + id, {withCredentials : true});
     return response;
 }
+
+export const requestAddUserToChat = async (id, userId) => {
+    const response = await axios.put(URL + `/addUserToChat/${id}/user/${userId}`, {withCredentials : true});
+    return response;
+}
+
+export const requestDeleteUserFromChat = async (id, userId) => {
+    const response = await axios.put(URL + `/removeUserFromChat/${id}/user/${userId}`, {withCredentials : true});
+    return response;
+}

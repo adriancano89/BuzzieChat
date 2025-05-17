@@ -6,7 +6,7 @@ import PopupConfirmar from "../components/popups/PopupConfirmar";
 import PopupEditarChat from "../components/popups/PopupEditarChat";
 import PopupExitoso from "../components/popups/PopupExitoso";
 import PopupError from "../components/popups/PopupError";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { User, Users, Trash2, X, Edit, Mail, Calendar } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { formatearFecha } from "../utils/utils";
@@ -14,18 +14,21 @@ import { formatearFecha } from "../utils/utils";
 export default function ChatInfo() {
     const [chat, setChat] = useState({});
 
-    const [usuariosAnadidos, setUsuariosAnadidos] = useState([]);
-    const [errorUsuariosAnadidos, setErrorUsuariosAnadidos] = useState("");
-    const [resultadoEdicion, setResultadoEdicion] = useState({});
+    const [usuarioAnadir, setUsuarioAnadir] = useState({});
+    const [usuarioEliminar, setUsuarioEliminar] = useState({});
+    const [resultadoPeticion, setResultadoPeticion] = useState({});
 
-    const [popupEliminar, setPopupEliminar] = useState(false);
+    const [popupAnadirUsuario, setPopupAnadirUsuario] = useState(false);
+    const [popupEliminarUsuario, setPopupEliminarUsuario] = useState(false);
+    const [popupEliminarChat, setPopupEliminarChat] = useState(false);
     const [popupEditar, setPopupEditar] = useState(false);
     const [popupExitoso, setPopupExitoso] = useState(false);
     const [popupError, setPopupError] = useState(false);
 
     const {user} = useAuth();
-    const { getChatInfo, deleteChat, clearError } = useChats();
+    const { getChatInfo, deleteChat, addUserToChat, deleteUserFromChat, error, clearError } = useChats();
     const params = useParams();
+    const navigate = useNavigate();
 
     const getChat = async () => {
         const chatInfo = await getChatInfo(params.id);
@@ -36,24 +39,41 @@ export default function ChatInfo() {
         getChat();
     }, []);
 
-    const anadirUsuario = (usuario) => {
-        setErrorUsuariosAnadidos("");
-        if (!usuariosAnadidos.includes(usuario)) {
-            setUsuariosAnadidos(anteriores => [...anteriores, usuario])
+    const anadirUsuarioChat = async () => {
+        setPopupAnadirUsuario(false);
+        clearError();
+        console.log("Usuario a añadir al chat: ");
+        console.log(usuarioAnadir);
+
+        let resultadoPeticion = await addUserToChat(params.id, usuarioAnadir._id);
+        setResultadoPeticion(resultadoPeticion);
+        if (resultadoPeticion.exitosa) {
+            setPopupExitoso(true);
+            getChat();
         }
         else {
-            setErrorUsuariosAnadidos("El usuario " + usuario.username + " ya ha sido agregado");
+            setPopupError(true);
         }
-    };
+    }
 
-    const eliminarUsuario = (usuario) => {
-        setUsuariosAnadidos(anteriores => {
-            return anteriores.filter((user) => user._id !== usuario._id);
-        });
-    };
+    const eliminarUsuarioChat = async () => {
+        setPopupEliminarUsuario(false);
+        clearError();
+        console.log("Eliminar usuario del chat: " + usuarioEliminar.username);
+        let eliminacionExitosa = await deleteUserFromChat(params.id, usuarioEliminar._id);
+        if (eliminacionExitosa) {
+            setResultadoPeticion({exitosa: true, mensaje: "Usuario eliminado del chat correctamente"});
+            setPopupExitoso(true);
+            getChat();
+        }
+        else {
+            setResultadoPeticion({exitosa: false, mensaje: error});
+            setPopupError(true);
+        }
+    }
 
     const handleEditar = (resultado) => {
-        setResultadoEdicion(resultado);
+        setResultadoPeticion(resultado);
         setPopupEditar(false);
         if (resultado.exitosa) {
             setPopupExitoso(true);
@@ -67,12 +87,13 @@ export default function ChatInfo() {
     const eliminarChat = async () => {
         clearError();
         let exitoso = await deleteChat(params.id);
-        setPopupEliminar(false);
+        setPopupEliminarChat(false);
         if (!exitoso) {
+            setResultadoPeticion({exitosa: true, mensaje: error});
             setPopupError(true);
         }
         else {
-            setPopupExitoso(true);
+            navigate('/chats');
         }
     };
 
@@ -85,9 +106,9 @@ export default function ChatInfo() {
     }
     
     return (
-        <main className="flex h-screen">
+        <main className="flex flex-row h-auto">
             <Sidebar />
-            <div className="flex flex-col flex-1 justify-between overflow-hidden bg-gray-100 p-6">
+            <div className="flex flex-col flex-1 justify-between bg-gray-100 p-6">
                 <section className="flex flex-col bg-white rounded-lg shadow-md p-6 mb-4">
                     <div className="flex flex-row justify-center gap-2">
                         {
@@ -145,7 +166,7 @@ export default function ChatInfo() {
                                                 </div>
                                                 {
                                                     esAdmin() ? (
-                                                        <X size={24} className="text-black cursor-pointer hover:text-gray-600 transition-colors"/>
+                                                        <X size={24} className="text-black cursor-pointer hover:text-gray-600 transition-colors" onClick={() => {setUsuarioEliminar(userInChat.user); setPopupEliminarUsuario(true);}}/>
                                                     ) : (
                                                         ""
                                                     )
@@ -158,34 +179,10 @@ export default function ChatInfo() {
                                             <>
                                                 <div className="space-y-2">
                                                     <h2 className="text-lg font-medium">Añadir usuarios</h2>
-                                                    <div>
-                                                        {errorUsuariosAnadidos && <p className="text-red-500">{errorUsuariosAnadidos}</p>}
-                                                        <ul className="">
-                                                        {
-                                                            usuariosAnadidos && usuariosAnadidos.length > 0 ? (
-                                                                usuariosAnadidos.map((usuario, index) => {
-                                                                    return (
-                                                                        <li key={index} className="flex flex-row items-center justify-between bg-white border-2 border-gray-400 rounded-lg p-2 mb-2">
-                                                                            <span key={index} className="text-gray-700">{usuario.username}</span>
-                                                                            <Trash2 size={24} className="text-red-500 cursor-pointer hover:text-red-600" onClick={() => eliminarUsuario(usuario)}/>
-                                                                        </li>
-                                                                    )
-                                                                })
-                                                            ) : (
-                                                                <li className="text-gray-500">No se han añadido usuarios</li>
-                                                            )
-                                                        }
-                                                        </ul>
-                                                    </div>
-                                                    <SearchUsers onSelectUser={anadirUsuario}/>
+                                                    <SearchUsers onSelectUser={(usuario) => {setUsuarioAnadir(usuario); setPopupAnadirUsuario(true);}}/>
                                                 </div>
                                                 <div className="px-4 flex flex-col items-center">
-                                                    <button type="submit" className="w-1/2 lg:w-1/3 bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
-                                                        Agregar usuarios
-                                                    </button>
-                                                </div>
-                                                <div className="px-4 flex flex-col items-center">
-                                                    <button type="submit" onClick={() => setPopupEliminar(true)} className="w-1/2 lg:w-1/3 bg-red-500 hover:bg-red-600 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
+                                                    <button type="submit" onClick={() => setPopupEliminarChat(true)} className="w-1/2 lg:w-1/3 bg-red-500 hover:bg-red-600 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
                                                         Eliminar grupo
                                                     </button>
                                                 </div>
@@ -221,7 +218,7 @@ export default function ChatInfo() {
                                             </div>
                                         </div>
                                         <div className="px-4 w-full flex justify-center">
-                                            <button type="submit" onClick={() => setPopupEliminar(true)} className="w-1/2 lg:w-1/4 bg-red-500 hover:bg-red-600 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
+                                            <button type="submit" onClick={() => setPopupEliminarChat(true)} className="w-1/2 lg:w-1/4 bg-red-500 hover:bg-red-600 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
                                                 Eliminar chat
                                             </button>
                                         </div>
@@ -234,10 +231,12 @@ export default function ChatInfo() {
                     </div>
                 </section>
             </div>
-            {popupEliminar && <PopupConfirmar mensaje={"¿Deseas eliminar este chat?"} confirmar={eliminarChat} cancelar={() => setPopupEliminar(false)}/>}
+            {popupAnadirUsuario && <PopupConfirmar mensaje={"¿Deseas añadir a " + usuarioAnadir.username + " al chat?"} confirmar={anadirUsuarioChat} cancelar={() => setPopupAnadirUsuario(false)}/>}
+            {popupEliminarUsuario && <PopupConfirmar mensaje={"¿Deseas eliminar a " + usuarioEliminar.username + " del chat?"} confirmar={eliminarUsuarioChat} cancelar={() => setPopupEliminarUsuario(false)}/>}
+            {Object.keys(chat).length !== 0 && popupEliminarChat && <PopupConfirmar mensaje={`¿Deseas eliminar el chat${chat.name !== "" ? ` "${chat.name}"` : ""}?`} confirmar={eliminarChat} cancelar={() => setPopupEliminarChat(false)}/>}
             {Object.keys(chat).length !== 0 && popupEditar && <PopupEditarChat chat={chat} resultado={handleEditar} cancelar={() => setPopupEditar(false)}/>}
-            {popupExitoso && <PopupExitoso mensaje={resultadoEdicion.mensaje} confirmar={() => {setPopupExitoso(false);}}/>}
-            {popupError && <PopupError mensaje={resultadoEdicion.mensaje} confirmar={() => setPopupError(false)}/>}
+            {popupExitoso && <PopupExitoso mensaje={resultadoPeticion.mensaje} confirmar={() => {setPopupExitoso(false);}}/>}
+            {popupError && <PopupError mensaje={resultadoPeticion.mensaje} confirmar={() => setPopupError(false)}/>}
         </main>
     )
 }

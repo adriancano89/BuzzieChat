@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import { requestGetChats, requestGetChat, requestCreateChat, requestDeleteChat, requestGetChatInfo, requestUpdateChat } from "../api/ChatRequests";
+import { requestGetChats, requestGetChat, requestCreateChat, requestDeleteChat, requestGetChatInfo, requestUpdateChat, requestAddUserToChat, requestDeleteUserFromChat } from "../api/ChatRequests";
 import { requestCreateMessage } from "../api/MessageRequests";
 const ChatContext = createContext();
 
@@ -96,12 +96,39 @@ export const ChatProvider = ({children}) => {
         return exitoso;
     };
 
+    const addUserToChat = async (chatId, userId) => {
+        let resultadoPeticion = {};
+        try {
+            const response = await requestAddUserToChat(chatId, userId);
+            console.log(response);
+            resultadoPeticion.exitosa = true;
+            resultadoPeticion.mensaje = response.data.message;
+        } catch (error) {
+            resultadoPeticion.exitosa = false;
+            resultadoPeticion.mensaje = error.response.data.message;
+        }
+        return resultadoPeticion;
+    }
+
+    const deleteUserFromChat = async (chatId, userId) => {
+        let exitoso = false;
+        try {
+            const response = await requestDeleteUserFromChat(chatId, userId);
+            console.log(response);
+            exitoso = true;
+        } catch (error) {
+            console.log(error.response.data.message);
+            setError(error.response.data.message);
+        }
+        return exitoso;
+    }
+
     const clearError = () => {
         setError("");
     };
 
     return (
-        <ChatContext.Provider value={{ chats, getChats, getChat, getChatInfo, insertMessage, createChat, updateChat, deleteChat, error, setError, clearError }}>
+        <ChatContext.Provider value={{ chats, getChats, getChat, getChatInfo, insertMessage, createChat, updateChat, deleteChat, addUserToChat, deleteUserFromChat, error, setError, clearError }}>
             {children}
         </ChatContext.Provider>
     )
