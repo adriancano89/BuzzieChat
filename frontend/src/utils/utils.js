@@ -7,3 +7,13 @@ export const formatearFecha = (fecha) => {
 
     return fechaFormateada;
 }
+
+export const validarUsername = (username) => {
+    const regex = /^(?!\d+$)[a-zA-Z0-9]+$/;
+    return regex.test(username);
+}
+
+export const validarEmail = (email) => {
+    const regex = /\S+@\S+\.\S+/;
+    return regex.test(email);
+}

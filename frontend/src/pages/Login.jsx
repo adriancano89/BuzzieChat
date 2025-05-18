@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
+import { validarEmail } from "../utils/utils";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -15,9 +16,9 @@ export default function Login() {
     const handleEmailChange = (event) => {
         const emailActual = event.target.value;
         setEmail(emailActual);
-        const regex = /\S+@\S+\.\S+/;
+        const emailValido = validarEmail(emailActual);
         
-        if (emailActual != '' && !regex.test(emailActual)) {
+        if (emailActual != '' && !emailValido) {
             setErrors({ email: 'El correo electrónico no es válido' });
         }
         else {

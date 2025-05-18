@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { requestLogin, requestRegistro, requestLogout, requestVerificarToken } from '../api/UserRequests';
+import { requestLogin, requestRegistro, requestLogout, requestVerificarToken, requestActualizarPerfil } from '../api/UserRequests';
 import { useNavigate } from 'react-router-dom';
 const AuthContext = createContext();
 
@@ -51,6 +51,20 @@ export const AuthProvider = ({children}) => {
         }
     };
 
+    const actualizarPerfil = async (usuario) => {
+        let resultadoPeticion = {}
+        try {
+            const response = await requestActualizarPerfil(usuario);
+            console.log(response);
+            resultadoPeticion.exitosa = true;
+            resultadoPeticion.mensaje = response.data.message;
+        } catch (error) {
+            resultadoPeticion.exitosa = false;
+            resultadoPeticion.mensaje = error.response.data.message;
+        }
+        return resultadoPeticion;
+    };
+
     const clearError = () => {
         setError("");
     };
@@ -77,7 +91,7 @@ export const AuthProvider = ({children}) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ login, register, logout, isAuthenticated, user, loading, error, clearError }}>
+        <AuthContext.Provider value={{ login, register, logout, actualizarPerfil, isAuthenticated, user, loading, error, clearError }}>
             {children}
         </AuthContext.Provider>
     )

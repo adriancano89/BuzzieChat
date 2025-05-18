@@ -103,6 +103,37 @@ export const perfil = async (req, res) => {
     res.json(usuario);
 };
 
+export const actualizarPerfil = async (req, res) => {
+    const { username, email, password } = req.body;
+    const usuario = await Usuario.findById(req.user.id);
+    const usuarioEncontrado = await Usuario.findOne({$or: [{ email }, { username }], _id : { $ne : usuario._id }});
+
+    if (usuarioEncontrado) {
+        if (username === usuarioEncontrado.username) {
+            res.status(400).json({ message : "El nombre de usuario introducido ya existe." });
+        }
+        else {
+            res.status(400).json({ message : "El correo electrónico introducido ya existe." });
+        }
+    }
+    else {
+        let nuevoPassword;
+        if (password === "") {
+            nuevoPassword = usuario.password;
+        }
+        else {
+            nuevoPassword = await bcrypt.hash(password, 10);
+        }
+        const nuevosDatos = {
+            username : username,
+            email : email,
+            password : nuevoPassword
+        };
+        const usuarioActualizado = await Usuario.findByIdAndUpdate(usuario._id, { $set: nuevosDatos }, { new: true, runValidators: true });
+        res.status(200).json({message : "Usuario actualizado con éxito.", usuario : usuarioActualizado});
+    }
+};
+
 export const getUsers = async (req, res) => {
     try {
         const { busqueda } = req.body;

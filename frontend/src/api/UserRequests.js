@@ -22,6 +22,11 @@ export const requestLogout = async () => {
     return response;
 }
 
+export const requestActualizarPerfil = async (usuario) => {
+    const response = await axios.post(URL + '/updateProfile', usuario, {withCredentials : true});
+    return response;
+}
+
 export const requestGetUsers = async (busqueda) => {
     const response = await axios.post(URL + '/getUsers', busqueda, {withCredentials : true});
     return response;

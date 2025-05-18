@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { validarUsername, validarEmail } from "../utils/utils";
 
 export default function Register() {
     const [username, setUserName] = useState("");
@@ -16,8 +17,8 @@ export default function Register() {
     const handleUserNameChange = (event) => {
         const userNameActual = event.target.value;
         setUserName(userNameActual);
-        const regex = /^(?!\d+$)[a-zA-Z0-9]+$/;
-        if (userNameActual != "" && !regex.test(userNameActual)) {
+        const userNameValido = validarUsername(userNameActual);
+        if (userNameActual != "" && !userNameValido) {
             setErrors(erroresAnteriores => ({
                 ...erroresAnteriores,
                 username: "El nombre de usuario no puede contener solo numeros",
@@ -34,8 +35,8 @@ export default function Register() {
     const handleEmailChange = (event) => {
         const emailActual = event.target.value;
         setEmail(emailActual);
-        const regex = /\S+@\S+\.\S+/;
-        if (emailActual != '' && !regex.test(emailActual)) {
+        const emailValido = validarEmail(emailActual);
+        if (emailActual != '' && !emailValido) {
             setErrors(erroresAnteriores => ({
                 ...erroresAnteriores,
                 email: "El correo electrónico introducido no es válido",
