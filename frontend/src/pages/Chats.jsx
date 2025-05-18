@@ -6,12 +6,19 @@ import { useChats } from '../context/ChatContext';
 import { useNavigate } from 'react-router-dom';
 
 export default function Chats() {
-    const [usuario, setUsuario] = useState("");
+    const [busqueda, setBusqueda] = useState("");
     const {chats, getChats} = useChats();
     const navigate = useNavigate();
+
     useEffect(() => {
-        getChats();
+        getChats({ busqueda : "" });
     }, []);
+
+    const handleSearch = (event) => {
+        const { value } = event.target;
+        setBusqueda(value);
+        getChats({ busqueda: value.trim()});
+    }
 
     return (
         <main className="flex h-screen bg-gray-100">
@@ -31,7 +38,8 @@ export default function Chats() {
                             type="text"
                             className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                             placeholder="Buscar chat..."
-                            onChange={(e) => setUsuario(e.target.value)}
+                            value={busqueda}
+                            onChange={handleSearch}
                         />
                     </div>
                 </section>
@@ -39,9 +47,13 @@ export default function Chats() {
                 <section className="flex-1 overflow-y-auto">
                     <div className="divide-y divide-gray-200">
                     {
-                        chats.map((chat, index) => (
-                            <ChatCard key={index} chat={chat} />
-                        ))
+                        chats && chats.length > 0 ? (
+                            chats.map((chat, index) => (
+                                <ChatCard key={index} chat={chat} />
+                            ))
+                        ) : (
+                            <p className="text-gray-800 text-center mt-4">No se han encontrado resultados.</p>
+                        )
                     }
                     </div>
                 </section>

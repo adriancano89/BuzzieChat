@@ -49,10 +49,29 @@ export const deleteChat = async (req, res) => {
 export const getChats = async (req, res) => {
     try {
         const userId = new Types.ObjectId(req.user.id);
+        const { busqueda } = req.body;
         const chats = await Chat.find({ "users.user" : userId }).populate("users.user");
         
+        let busquedaMinusculas = busqueda.toLowerCase();
+        
+        const filteredChats = chats.filter(chat => {
+            let foundedChat = false;
+            if (chat.users.length === 2) {
+                const otherUser = chat.users.find(userInChat => userInChat.user._id.toString() !== userId.toString());
+                if (otherUser.user.username.toLowerCase().includes(busquedaMinusculas)) {
+                    foundedChat = true;
+                }
+            }
+            else {
+                if (chat.name.toLowerCase().includes(busquedaMinusculas)) {
+                    foundedChat = true;
+                }
+            }
+            return foundedChat;
+        });
+
         const chatsWithLastMessage = await Promise.all(
-            chats.map(async (chat) => {
+            filteredChats.map(async (chat) => {
                 const chatObject = chat.toObject();
                 const lastMessage = await Message.findOne({ chat: chat._id }).sort({ createdAt: -1 }).populate("sender");
                 chatObject.lastMessage = lastMessage;

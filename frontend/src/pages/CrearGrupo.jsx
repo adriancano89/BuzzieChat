@@ -56,8 +56,8 @@ export default function CrearGrupo() {
         if (nombre.trim() === "") {
             errores.push("El nombre del grupo no puede estar vacío.");
         }
-        if (usuariosAnadidos.length < 3) {
-            errores.push("El grupo debe tener al menos 3 usuarios.");
+        if (usuariosAnadidos.length < 2) {
+            errores.push("El grupo debe tener al menos 3 usuarios."); //El tercer usuario es el usuario que crea el grupo
         }
         if (errores.length === 0) {
             const usuariosChat = [];
@@ -102,7 +102,7 @@ export default function CrearGrupo() {
                             id="nombre" 
                             value={nombre} 
                             onChange={(e) => setNombre(e.target.value)} 
-                            className="w-full md:w-1/3 lg:w-1/4 px-2 py-0.5 border-2 border-gray-400 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-500 focus:border-indigo-500 text-gray-800" 
+                            className="w-full md:w-1/3 lg:w-1/3 px-2 py-0.5 border-2 border-gray-400 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-500 focus:border-indigo-500 text-gray-800" 
                             placeholder="Escribe el nombre del grupo"/>
                         </div>
                         <div className="mb-3">

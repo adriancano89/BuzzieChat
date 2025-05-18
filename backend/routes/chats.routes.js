@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/create', createChat);
 router.put('/update/:id', updateChat);
 router.delete('/delete/:id', validacion, validarAdminChat, deleteChat);
-router.get('/getChats', validacion, getChats);
+router.post('/getChats', validacion, getChats);
 router.put('/getChatWithMessages/:id', getChatWithMessages);
 router.put('/getChat/:id', getChat);
 router.put('/addUserToChat/:idChat/user/:idUser', addUserToChat);

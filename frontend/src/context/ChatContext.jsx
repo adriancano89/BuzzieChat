@@ -14,9 +14,9 @@ export const ChatProvider = ({children}) => {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    const getChats = async () => {
+    const getChats = async (data) => {
         try {
-            const response = await requestGetChats();
+            const response = await requestGetChats(data);
             console.log(response);
             setChats(response.data);
         } catch (error) {
