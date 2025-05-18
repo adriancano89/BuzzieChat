@@ -162,14 +162,14 @@ export const makeUserAdmin = async (req, res) => {
             if (userIndex !== -1) {
                 chat.users[userIndex].admin = true;
                 await chat.save();
-                res.status(200).json({ message: "Usuario convertido en admin con éxito" });
+                res.status(200).json({ message: "Rol admin asignado con éxito." });
             }
             else {
-                res.status(400).json({ message: "El usuario no está en el chat" });
+                res.status(400).json({ message: "El usuario no está en el chat." });
             }
         }
         else {
-            res.status(404).json({ message: "Chat no encontrado" });
+            res.status(404).json({ message: "Chat no encontrado." });
         }
     }
     catch (error) {
@@ -188,14 +188,14 @@ export const removeUserAdmin = async (req, res) => {
             if (userIndex !== -1) {
                 chat.users[userIndex].admin = false;
                 await chat.save();
-                res.status(200).json({ message: "Rol de admin eliminado con éxito" });
+                res.status(200).json({ message: "Rol de invitado asignado con éxito." });
             }
             else {
-                res.status(400).json({ message: "El usuario no está en el chat" });
+                res.status(400).json({ message: "El usuario no está en el chat." });
             }
         }
         else {
-            res.status(404).json({ message: "Chat no encontrado" });
+            res.status(404).json({ message: "Chat no encontrado." });
         }
     }
     catch (error) {

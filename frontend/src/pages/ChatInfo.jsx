@@ -15,18 +15,19 @@ export default function ChatInfo() {
     const [chat, setChat] = useState({});
 
     const [usuarioAnadir, setUsuarioAnadir] = useState({});
-    const [usuarioEliminar, setUsuarioEliminar] = useState({});
+    const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({});
     const [resultadoPeticion, setResultadoPeticion] = useState({});
 
     const [popupAnadirUsuario, setPopupAnadirUsuario] = useState(false);
     const [popupEliminarUsuario, setPopupEliminarUsuario] = useState(false);
+    const [popupCambiarRol, setPopupCambiarRol] = useState(false);
     const [popupEliminarChat, setPopupEliminarChat] = useState(false);
     const [popupEditar, setPopupEditar] = useState(false);
     const [popupExitoso, setPopupExitoso] = useState(false);
     const [popupError, setPopupError] = useState(false);
 
     const {user} = useAuth();
-    const { getChatInfo, deleteChat, addUserToChat, deleteUserFromChat, error, clearError } = useChats();
+    const { getChatInfo, deleteChat, addUserToChat, deleteUserFromChat, makeUserAdminFromChat, removeUserAdmin, error, clearError } = useChats();
     const params = useParams();
     const navigate = useNavigate();
 
@@ -59,8 +60,8 @@ export default function ChatInfo() {
     const eliminarUsuarioChat = async () => {
         setPopupEliminarUsuario(false);
         clearError();
-        console.log("Eliminar usuario del chat: " + usuarioEliminar.username);
-        let eliminacionExitosa = await deleteUserFromChat(params.id, usuarioEliminar._id);
+        console.log("Eliminar usuario del chat: " + usuarioSeleccionado.username);
+        let eliminacionExitosa = await deleteUserFromChat(params.id, usuarioSeleccionado._id);
         if (eliminacionExitosa) {
             setResultadoPeticion({exitosa: true, mensaje: "Usuario eliminado del chat correctamente"});
             setPopupExitoso(true);
@@ -68,6 +69,26 @@ export default function ChatInfo() {
         }
         else {
             setResultadoPeticion({exitosa: false, mensaje: error});
+            setPopupError(true);
+        }
+    }
+
+    const cambiarRol = async () => {
+        console.log("Cambiar el rol");
+        setPopupCambiarRol(false);
+        let peticion;
+        if (!usuarioSeleccionado.admin) {
+            peticion = await makeUserAdminFromChat(params.id, usuarioSeleccionado.user._id);
+        }
+        else {
+            peticion = await removeUserAdmin(params.id, usuarioSeleccionado.user._id);
+        }
+        setResultadoPeticion(peticion);
+        if (peticion.exitosa) {
+            setPopupExitoso(true);
+            getChat();
+        }
+        else {
             setPopupError(true);
         }
     }
@@ -104,7 +125,7 @@ export default function ChatInfo() {
     const usuarioInvitado = () => {
         return chat.users.find(userInChat => userInChat.user._id !== user._id).user;
     }
-    
+
     return (
         <main className="flex flex-row h-auto">
             <Sidebar />
@@ -165,11 +186,18 @@ export default function ChatInfo() {
                                                     </span>
                                                 </div>
                                                 {
-                                                    esAdmin() ? (
-                                                        <X size={24} className="text-black cursor-pointer hover:text-gray-600 transition-colors" onClick={() => {setUsuarioEliminar(userInChat.user); setPopupEliminarUsuario(true);}}/>
-                                                    ) : (
-                                                        ""
-                                                    )
+                                                    <div className="flex flex-row items-center gap-2">
+                                                        <span key={index} className={`${userInChat.admin ? 'bg-blue-500 text-white' : 'bg-emerald-500 text-white'} px-3 py-1 rounded-full text-sm cursor-pointer`} onClick={esAdmin() && userInChat.user._id !== user._id ? () => {setUsuarioSeleccionado(userInChat); setPopupCambiarRol(true)} : undefined}>
+                                                            {userInChat.admin ? "ADMIN" : "INVITADO"}
+                                                        </span>
+                                                        {
+                                                            esAdmin() && userInChat.user._id !== user._id ? (
+                                                                <X size={24} className="text-black cursor-pointer hover:text-gray-600 transition-colors" onClick={() => {setUsuarioSeleccionado(userInChat.user); setPopupEliminarUsuario(true);}}/>
+                                                            ) : (
+                                                                ""
+                                                            )
+                                                        }
+                                                    </div>
                                                 }
                                             </li>
                                         ))}
@@ -232,7 +260,8 @@ export default function ChatInfo() {
                 </section>
             </div>
             {popupAnadirUsuario && <PopupConfirmar mensaje={"¿Deseas añadir a " + usuarioAnadir.username + " al chat?"} confirmar={anadirUsuarioChat} cancelar={() => setPopupAnadirUsuario(false)}/>}
-            {popupEliminarUsuario && <PopupConfirmar mensaje={"¿Deseas eliminar a " + usuarioEliminar.username + " del chat?"} confirmar={eliminarUsuarioChat} cancelar={() => setPopupEliminarUsuario(false)}/>}
+            {popupEliminarUsuario && <PopupConfirmar mensaje={"¿Deseas eliminar a " + usuarioSeleccionado.username + " del chat?"} confirmar={eliminarUsuarioChat} cancelar={() => setPopupEliminarUsuario(false)}/>}
+            {popupCambiarRol && <PopupConfirmar mensaje={"¿Deseas asignar el rol de " + (!usuarioSeleccionado.admin ? "admin" : "invitado") + " a " + usuarioSeleccionado.user.username + "?"} confirmar={cambiarRol} cancelar={() => setPopupCambiarRol(false)}/>}
             {Object.keys(chat).length !== 0 && popupEliminarChat && <PopupConfirmar mensaje={`¿Deseas eliminar el chat${chat.name !== "" ? ` "${chat.name}"` : ""}?`} confirmar={eliminarChat} cancelar={() => setPopupEliminarChat(false)}/>}
             {Object.keys(chat).length !== 0 && popupEditar && <PopupEditarChat chat={chat} resultado={handleEditar} cancelar={() => setPopupEditar(false)}/>}
             {popupExitoso && <PopupExitoso mensaje={resultadoPeticion.mensaje} confirmar={() => {setPopupExitoso(false);}}/>}
