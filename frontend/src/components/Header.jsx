@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
-
+import { MessageSquareMore } from "lucide-react";
 export default function Header() {
 
     const { isAuthenticated, logout, user } = useAuth();
@@ -21,10 +21,10 @@ export default function Header() {
             <nav className="flex items-center space-x-6 md:space-x-8">
             { isAuthenticated ? (
                     <>
-                        <Link to="/chats" className="text-white hover:text-green-400 transition duration-300 text-base md:text-lg font-medium">
-                            Mis chats
+                        <Link to="/chats" className="flex flex-row items-center gap-2 text-white hover:text-green-400 transform hover:scale-103 transition duration-300 text-base md:text-lg font-medium ">
+                            <MessageSquareMore />Mis chats
                         </Link>
-                        <Link to="/perfil" className="text-white hover:text-green-400 transition duration-300 text-base md:text-lg font-medium">
+                        <Link to="/perfil" className="text-white hover:text-green-400 transform hover:scale-103 transition duration-300 text-base md:text-lg font-medium">
                             {user.username}
                         </Link>
                         <button onClick={logout} className="bg-white text-blue-600 hover:bg-green-400 hover:text-white px-5 py-2 rounded-full shadow-lg transition duration-300 transform hover:scale-105 text-base md:text-lg font-semibold hover:cursor-pointer">
@@ -33,7 +33,7 @@ export default function Header() {
                     </>
                 ) : (
                     <>
-                        <Link to="/login" className="text-white hover:text-green-400 transition duration-300 text-base md:text-lg font-medium">
+                        <Link to="/login" className="flex flex-row items-center gap-2 text-white hover:text-green-400 transition duration-300 text-base md:text-lg font-medium">
                             Iniciar sesión
                         </Link>
                         <Link to="/register" className="bg-white text-blue-600 hover:bg-green-400 hover:text-white px-5 py-2 rounded-full shadow-lg transition duration-300 transform hover:scale-105 text-base md:text-lg font-semibold hover:cursor-pointer">

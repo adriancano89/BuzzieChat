@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import Sidebar from "../components/Sidebar";
-import { User, Mail, Calendar, LockKeyhole } from "lucide-react";
+import { User, Mail, Calendar, LockKeyhole, LogOut } from "lucide-react";
 import { formatearFecha, validarUsername, validarEmail } from "../utils/utils";
 import PopupExitoso from "../components/popups/PopupExitoso";
 import PopupError from "../components/popups/PopupError";
@@ -148,7 +148,11 @@ export default function Perfil() {
                         </div>
                     </form>
                 </div>
-                <button className="mt-4 border-2 border-black py-2 px-4 rounded hover:bg-gray-100 transition" onClick={logout}>Cerrar sesión</button>
+                <div className="flex flex-row justify-center">
+                    <button className="w-1/2 sm:w-1/3 lg:w-1/5 flex flex-row justify-center gap-2 mt-4 border-2 border-red-400 bg-white text-red-600 hover:bg-red-400 hover:text-white transition-colors duration-300 px-5 py-2.5 rounded-md shadow-md font-semibold" onClick={logout}>
+                        <LogOut /> Cerrar sesión
+                    </button>
+                </div>
             </div>
             {popupExitoso && <PopupExitoso mensaje={resultadoPeticion.mensaje} confirmar={() => {setPopupExitoso(false);}}/>}
             {popupError && <PopupError mensaje={resultadoPeticion.mensaje} confirmar={() => setPopupError(false)}/>}

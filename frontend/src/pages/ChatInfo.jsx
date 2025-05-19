@@ -187,9 +187,26 @@ export default function ChatInfo() {
                                                 </div>
                                                 {
                                                     <div className="flex flex-row items-center gap-2">
-                                                        <span key={index} className={`${userInChat.admin ? 'bg-blue-500 text-white' : 'bg-emerald-500 text-white'} px-3 py-1 rounded-full text-sm cursor-pointer`} onClick={esAdmin() && userInChat.user._id !== user._id ? () => {setUsuarioSeleccionado(userInChat); setPopupCambiarRol(true)} : undefined}>
-                                                            {userInChat.admin ? "ADMIN" : "INVITADO"}
-                                                        </span>
+                                                        {
+                                                            esAdmin() && userInChat.user._id !== user._id ? (
+                                                                <select key={index} className={`${userInChat.admin ? 'bg-blue-500 text-white' : 'bg-emerald-500 text-white'} px-3 py-1 rounded-full text-sm cursor-pointer`} value={userInChat.admin ? 'ADMIN' : 'INVITADO'} 
+                                                                    onChange={
+                                                                        () => {
+                                                                            if (esAdmin() && userInChat.user._id !== user._id) {
+                                                                                setUsuarioSeleccionado(userInChat); 
+                                                                                setPopupCambiarRol(true);
+                                                                            }
+                                                                        }}>
+                                                                    <option value="ADMIN">ADMIN</option>
+                                                                    <option value="INVITADO">INVITADO</option>
+                                                                </select>
+                                                            ) : (
+                                                                <span key={index} className={`${userInChat.admin ? 'bg-blue-500 text-white' : 'bg-emerald-500 text-white'} px-3 py-1 rounded-full text-sm cursor-pointer`} onClick={esAdmin() && userInChat.user._id !== user._id ? () => {setUsuarioSeleccionado(userInChat); setPopupCambiarRol(true)} : undefined}>
+                                                                    {userInChat.admin ? "ADMIN" : "INVITADO"}
+                                                                </span>
+                                                            )
+                                                        }
+                                                        
                                                         {
                                                             esAdmin() && userInChat.user._id !== user._id ? (
                                                                 <X size={24} className="text-black cursor-pointer hover:text-gray-600 transition-colors" onClick={() => {setUsuarioSeleccionado(userInChat.user); setPopupEliminarUsuario(true);}}/>
