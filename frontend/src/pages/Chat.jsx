@@ -16,8 +16,9 @@ export default function Chat() {
     const [chat, setChat] = useState({});
     const [mensaje, setMensaje] = useState("");
     const [mensajes, setMensajes] = useState([]);
+    const [file, setFile] = useState(null);
     const {user} = useAuth();
-    const { getChat, insertMessage, error } = useChats();
+    const { getChat, insertMessage, insertFileMessage, error } = useChats();
     const refFinalMensajes = useRef(null);
     const navigate = useNavigate();
     const params = useParams();
@@ -26,15 +27,30 @@ export default function Chat() {
         setMensajes(prevMensajes => [...prevMensajes, mensaje]);
     };
 
+    const handleFileChange = (event) => {
+        setFile(event.target.files[0]);
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const newMessage = {
-            chat : params.id,
-            sender : user._id,
-            type : 'text',
-            content : mensaje.trim()
-        };
-        const insertedMessage = await insertMessage(newMessage);
+        let insertedMessage;
+        if (!file) {
+            const newMessage = {
+                chat : params.id,
+                sender : user._id,
+                type : 'text',
+                content : mensaje.trim()
+            };
+            insertedMessage = await insertMessage(newMessage);
+        }
+        else {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('chat', params.id);
+            formData.append('sender', user._id);
+            console.log("Nuevo mensaje de tipo imagen");
+            insertedMessage = await insertFileMessage(formData);
+        }
         socket.emit('message', insertedMessage);
         anadirMensaje(insertedMessage);
         setMensaje("");
@@ -131,6 +147,7 @@ export default function Chat() {
                                     <Mensaje 
                                         key={index} 
                                         sender={mensaje.sender.username === user.username ? 'Tú' : mensaje.sender.username}
+                                        type={mensaje.type}
                                         content={mensaje.content}
                                         time={mensaje.createdAt}
                                     />
@@ -158,6 +175,7 @@ export default function Chat() {
                             onChange={(event) => setMensaje(event.target.value)}
                         />
                     </div>
+                    <input type="file" name="file" id="file" onChange={handleFileChange}/>
                     <input 
                         type="submit" 
                         value="Enviar" 

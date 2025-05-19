@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { requestGetChats, requestGetChat, requestCreateChat, requestDeleteChat, requestGetChatInfo, requestUpdateChat, requestAddUserToChat, requestDeleteUserFromChat, requestMakeUserAdmin, requestRemoveUserAdmin } from "../api/ChatRequests";
-import { requestCreateMessage } from "../api/MessageRequests";
+import { requestCreateMessage, requestCreateFileMessage } from "../api/MessageRequests";
 const ChatContext = createContext();
 
 export const useChats = () => {
@@ -55,6 +55,17 @@ export const ChatProvider = ({children}) => {
             console.log(response);
         } catch (error) {
             console.log(error.response.data.message);
+        }
+        return response.data;
+    }
+
+    const insertFileMessage = async (formData) => {
+        let response;
+        try {
+            response = await requestCreateFileMessage(formData);
+            console.log(response);
+        } catch (error) {
+            console.log(error);
         }
         return response.data;
     }
@@ -157,7 +168,7 @@ export const ChatProvider = ({children}) => {
     };
 
     return (
-        <ChatContext.Provider value={{ chats, getChats, getChat, getChatInfo, insertMessage, createChat, updateChat, deleteChat, addUserToChat, deleteUserFromChat, makeUserAdminFromChat, removeUserAdmin, error, setError, clearError }}>
+        <ChatContext.Provider value={{ chats, getChats, getChat, getChatInfo, insertMessage, insertFileMessage, createChat, updateChat, deleteChat, addUserToChat, deleteUserFromChat, makeUserAdminFromChat, removeUserAdmin, error, setError, clearError }}>
             {children}
         </ChatContext.Provider>
     )

@@ -1,6 +1,7 @@
 import mongoose, {Types} from "mongoose";
 import Chat from "../models/Chat.model.js";
 import Message from "../models/Message.model.js";
+import fs from 'fs';
 
 export const createChat = async (req, res) => {
     try {
@@ -35,6 +36,7 @@ export const deleteChat = async (req, res) => {
         await Message.deleteMany({ chat : idChat });
         const chat = await Chat.findByIdAndDelete(idChat);
         if (chat) {
+            fs.rmSync(`./uploads/chat-${idChat}`, { recursive: true, force: true });
             res.status(200).json({ message: "Chat eliminado con éxito" });
         }
         else {
