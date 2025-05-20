@@ -6,8 +6,8 @@ import PopupConfirmar from "../components/popups/PopupConfirmar";
 import PopupEditarChat from "../components/popups/PopupEditarChat";
 import PopupExitoso from "../components/popups/PopupExitoso";
 import PopupError from "../components/popups/PopupError";
-import { useNavigate, useParams } from "react-router-dom";
-import { User, Users, Trash2, X, Edit, Mail, Calendar } from "lucide-react";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import { User, Users, Trash2, X, Edit, Mail, Calendar, ArrowLeft } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { formatearFecha } from "../utils/utils";
 
@@ -132,6 +132,9 @@ export default function ChatInfo() {
             <div className="flex flex-col flex-1 justify-between bg-gray-100 p-6">
                 <section className="flex flex-col bg-white rounded-lg shadow-md p-6 mb-4">
                     <div className="flex flex-row justify-center gap-2">
+                        <Link to={`/chat/${params.id}`} className="mt-1">
+                            <ArrowLeft size={28} />
+                        </Link>
                         {
                             chat && chat.users ? (
                                 chat.users.length > 2 ? (

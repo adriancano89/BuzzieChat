@@ -18,6 +18,16 @@ export default function ChatCard({ chat }) {
         return usuario;
     };
 
+    const tipoMensaje = (type) => {
+        let tipo;
+        if (type === 'image') {
+            tipo = 'Foto';
+        } else if (type === 'video') {
+            tipo = 'Video';
+        }
+        return tipo;
+    }
+
     return (
         <div className="flex items-center p-4 hover:bg-gray-200 cursor-pointer transition-colors duration-200" onClick={mostrarChat}>
             <div className="relative">
@@ -52,7 +62,7 @@ export default function ChatCard({ chat }) {
                 <div className="flex justify-between items-center mt-1">
                     <p className="text-sm text-gray-500 truncate">
                         {
-                            chat.lastMessage ? `${usuarioUltimoMensaje(chat.lastMessage.sender.username)}: ${chat.lastMessage.content}` : ''
+                            chat.lastMessage ? `${usuarioUltimoMensaje(chat.lastMessage.sender.username)}: ${chat.lastMessage.type === 'text' ? chat.lastMessage.content : tipoMensaje(chat.lastMessage.type)}` : ''
                         }
                     </p>
                 </div>
