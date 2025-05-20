@@ -1,12 +1,13 @@
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
 import { MessageSquareMore } from "lucide-react";
 export default function Header() {
 
     const { isAuthenticated, logout, user } = useAuth();
-    
+    const location = useLocation();
+    const fondoHome = location.pathname === '/' || location.pathname === '/login' || location.pathname === '/register';
     return (
-        <header className="fondo-home w-full py-6 px-8 md:px-16 flex justify-between items-center bg-transparent z-50">
+        <header className={`${fondoHome ? 'fondo-home' : 'bg-indigo-800'} w-full py-6 px-8 md:px-16 flex justify-between items-center z-50`}>
             <div>
                 <Link to="/" className="text-white text-3xl md:text-4xl font-extrabold tracking-wider flex items-center gap-1">
                     <span className="text-white">Buzzie</span>

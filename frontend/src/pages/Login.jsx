@@ -37,26 +37,43 @@ export default function Login() {
         }
     }
     return (
-        <div className="flex flex-col items-center">
-            <div className="max-w-md flex flex-col items-center shadow-lg border-2 border-blue-200 rounded-lg p-2">
-                <h1 className="text-2xl font-bold ">Iniciar sesión</h1>
-                <form action="" method="POST" className="flex flex-col p-8 space-y-4" onSubmit={handleSubmit}>
-                    <div className="flex flex-col space-y-2">
-                        <label htmlFor="email">Email</label>
-                        <input type="email" name="email" id="email" className="border-2 border-black rounded-md px-4 py-2" onChange={handleEmailChange} required/>
-                        {errors.email && <span className="text-red-500 font-bold">{errors.email}</span>}
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-400 to-indigo-600 px-4">
+            <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-blue-300 p-8">
+                <h1 className="text-3xl font-extrabold text-center text-blue-600 mb-6">Iniciar sesión</h1>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-semibold text-gray-700">Email</label>
+                        <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        className="mt-1 w-full border-2 border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        onChange={handleEmailChange}
+                        required
+                        />
+                        {errors.email && <span className="text-red-500 text-sm font-semibold">{errors.email}</span>}
                     </div>
-                    <div className="flex flex-col space-y-2">
-                        <label htmlFor="password">Contraseña</label>
-                        <input type="password" name="password" id="password" className="border-2 border-black rounded-md px-4 py-2" onChange={(event) => setPassword(event.target.value)} required/>
+                    <div>
+                        <label htmlFor="password" className="block text-sm font-semibold text-gray-700">Contraseña</label>
+                        <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        className="mt-1 w-full border-2 border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        />
                     </div>
-                    <div className="flex flex-col items-center">
-                        <div className="flex flex-row gap-2">
-                            <span>¿No tienes una cuenta?</span><Link to='/register' className="text-blue-500 font-bold">Regístrate</Link>
-                        </div>
-                        {error && <span className="text-red-500 font-bold">{error}</span>}
+                    {error && <div className="text-center text-red-600 text-sm font-semibold">{error}</div>}
+                    <input
+                        type="submit"
+                        value="Iniciar sesión"
+                        className="w-full bg-blue-500 hover:bg-blue-600 transition-colors duration-300 text-white text-lg font-medium py-2 rounded-lg shadow-md cursor-pointer"
+                    />
+                    <div className="text-center text-sm text-gray-600 mt-4">
+                        ¿No tienes una cuenta?
+                        <Link to='/register' className="text-blue-500 font-semibold hover:underline ml-1">Regístrate</Link>
                     </div>
-                    <input type="submit" value="Iniciar sesión" className="w-full bg-blue-500 text-white text-lg p-2 rounded-md "/>
                 </form>
             </div>
         </div>
