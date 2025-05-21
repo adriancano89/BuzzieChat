@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const URL = 'http://localhost:3000/chats';
+const URL = import.meta.env.VITE_API_URL + '/chats';
 
 export const requestGetChats = async (data) => {
     const response = await axios.post(URL + '/getChats', data, {withCredentials : true});
