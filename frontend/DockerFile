@@ -1,0 +1,19 @@
+# frontend/Dockerfile
+FROM node:18 AS builder
+
+WORKDIR /app
+COPY . .
+
+RUN npm install
+RUN npm run build
+
+# Serveix l'app amb 'serve'
+FROM node:18-slim
+
+RUN npm install -g serve
+
+WORKDIR /app
+COPY --from=builder /app/dist ./dist
+
+EXPOSE 5000
+CMD ["serve", "-s", "dist", "-l", "5000"]
