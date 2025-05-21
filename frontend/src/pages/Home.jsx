@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Lock } from "lucide-react";
 export default function Home() {
     return (
         <main className="fondo-home w-full h-screen flex flex-col justify-start items-center px-6 py-16">
@@ -35,11 +35,10 @@ export default function Home() {
                 </div>
 
                 <div className="tarjeta caja-descripcion p-5 flex flex-col items-center">
-                    <div className="bg-blue-500 rounded-full p-3 mb-3">
-                        <img src="/icons/seguridad.png" alt="100% Seguro" className="h-8 w-8" />
+                    <div className="bg-blue-500 rounded-full p-3 mb-3 mt-2">
+                        <Lock />
                     </div>
                     <p className="text-white text-lg font-medium">100% Seguro</p>
-                    <p className="text-gray-200 text-sm mt-1">Chats cifrados</p>
                 </div>
             </div>
         </main>

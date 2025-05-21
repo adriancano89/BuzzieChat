@@ -1,6 +1,8 @@
 import Usuario from "../models/User.model.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { spawn } from 'child_process';
+import dotenv from 'dotenv';
 
 export const registro = async (req, res) => {
     const {username, email, password} = req.body;
@@ -24,12 +26,35 @@ export const registro = async (req, res) => {
             })
             
             await nuevoUsuario.save();
-    
+
+            sendEmail(email, username);
+            
             res.status(201).json({ message: 'Usuario creado', user: nuevoUsuario });
+
         }
     } catch (error) {
         res.status(500).json({ message: 'Error al crear usuario', error: error.message });
     }
+}
+
+export const sendEmail = async (email, username, token) => {
+    const python = spawn('C:\\Users\\adria\\AppData\\Local\\Programs\\Python\\Python313\\python.exe', ['python/sendEmail.py', email, username, token], {
+        env : {
+            ...process.env
+        }
+    });
+
+    python.stdout.on('data', (data) => {
+    console.log(`Python stdout: ${data.toString()}`);
+    });
+
+    python.stderr.on('data', (data) => {
+        console.error(`Python stderr: ${data.toString()}`);
+    });
+
+    python.on('close', (code) => {
+        console.log(`Python terminó con código ${code}`);
+    });
 }
 
 export const login = async (req, res) => {

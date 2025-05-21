@@ -265,11 +265,17 @@ export default function ChatInfo() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="px-4 w-full flex justify-center">
-                                            <button type="submit" onClick={() => setPopupEliminarChat(true)} className="w-1/2 lg:w-1/4 bg-red-500 hover:bg-red-600 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
-                                                Eliminar chat
-                                            </button>
-                                        </div>
+                                        {
+                                            esAdmin() ? (
+                                                <div className="px-4 w-full flex justify-center">
+                                                    <button type="submit" onClick={() => setPopupEliminarChat(true)} className="w-1/2 lg:w-1/4 bg-red-500 hover:bg-red-600 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
+                                                        Eliminar chat
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                ""
+                                            )
+                                        }
                                     </div>
                                 )
                             ) : (
